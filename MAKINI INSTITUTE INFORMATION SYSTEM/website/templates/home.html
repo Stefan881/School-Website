@@ -1,0 +1,135 @@
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<li>
+
+{% if user.is_authenticated %}
+
+
+<table class="table table-striped table-hover table-bordered">
+  <thead class="table-dark">
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Reg No</th>
+      <th scope="col">Phone</th>
+      <th scope="col">Address</th>
+      <th scope="col">City</th>
+      <th scope="col">State</th>
+      <th scope="col">Zipcode</th>
+      <th scope="col">Created At</th>
+      <th scope="col">ID</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+{% if records %}
+	{% for record in customers %}
+		<tr>
+      
+			<td>{{ record.first_name }} {{ record.last_name }}</td>
+			<td>{{ record.email }}</td>
+      <td>{{ record.Registration}}</td>
+			<td>{{ record.phone }}</td>
+			<td>{{ record.address }}</td>
+			<td>{{ record.city }}</td>
+			<td>{{ record.state }}</td>
+			<td>{{ record.zipcode }}</td>
+			<td>{{ record.created_at }}</td>
+			<td><a href="{% url 'record' record.id %}">{{ record.id }}</a></td>
+		</tr>
+	{% endfor %}
+
+{% endif %}
+
+	
+	  </tbody>
+	</table>
+
+
+  <br/><br/>
+
+ <!-- {{ customers }} <br/>
+  Has Previous:{{ customers.has_previous }} <br/>
+  Has Next:{{ customers.has_next }} <br/>
+  Current Page:{{ customers.number }} <br/>
+  Number of Pages:{{ customers.paginator.num_pages }} <br/>
+  <hr><br/><br/>  -->
+
+
+
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+     
+ 
+
+
+
+
+  {% if customers.has_previous %}
+       <li class="page-item"><a class="page-link" href="?page=1">&laquo First</a></li>
+       <li class="page-item"><a class="page-link" href="?page={{ customers.previous_page_number}}">Previous</a></li>
+
+  {% endif %}
+
+  <!--<li class="page-item disabled"><a href="#" class ="page-link" >page{{ customers.number}} of {{ customers.paginator.num_pages}} </a></li> -->
+  {% for i in nums %}
+       <li class="page-item"><a class="page-link" href="?page={{ forloop.counter }}">{{ forloop.counter}}</a></li>
+  {% endfor %}
+{% if customers.has_next %}
+       <li class="page-item"><a class="page-link" href="?page={{ customers.next_page_number }}">Next</a></li>
+       <li class="page-item"><a class="page-link" href="?page={{ customers.paginator.num_pages}}">Last &raquo</a></li>
+
+
+{% endif %}
+</ul>
+</nav>
+<br/>
+
+<script language="javascrpt" type="text/javascript">
+
+  (function(d, m){
+  var kommunicateSettings = 
+      {"appId":"26e62e13b4fdf752d93df06f75a7472eb","popupWidget":true,"automaticChatOpenOnNavigation":true};
+  var s = document.createElement("script"); s.type = "text/javascript"; s.async = true;
+  s.src = "https://widget.kommunicate.io/v2/kommunicate.app";
+  var h = document.getElementsByTagName("head")[0]; h.appendChild(s);
+  window.kommunicate = m; m._globals = kommunicateSettings;
+ })(document, window.kommunicate || {});
+
+</script>
+
+
+
+{% else %}
+
+<body class="col-md-6 offset-md-3">
+  
+<h1>Login</h1>
+<br/>
+
+<form method="POST" action="{% url 'home' %}">
+	{% csrf_token %}
+
+  <div class="mb-3">
+    <input type="text" class="form-control" name="username", placeholder="Username" required>
+    
+  </div><br/>
+  <div class="mb-3">
+    <input type="password" class="form-control" name="password", placeholder="Password" required>
+  </div>
+  <br/>
+  <button type="submit" class="btn btn-secondary">Login</button>
+
+</form>
+
+</body>
+
+{% endif %}
+
+
+{% endblock %}
